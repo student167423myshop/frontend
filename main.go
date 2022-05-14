@@ -15,6 +15,7 @@ func getStaticHandler() http.Handler {
 func getRouter() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/", mainHandler).Methods("GET")
+	r.HandleFunc("/api/v1/products", productsHandler).Methods("GET")
 	r.PathPrefix("/static/").Handler(getStaticHandler())
 	return r
 }

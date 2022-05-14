@@ -4,6 +4,12 @@
 
 Home - To działa!
 
+{{ range $.products }}
+<a href="/product/{{.Id}}">
+    <div>{{ .Name }}</div>
+</a>
+{{ end }}
+
 {{ template "footer" . }}
 
 {{ end }}
