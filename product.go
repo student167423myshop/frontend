@@ -32,12 +32,12 @@ func getProducts() []Product {
 	client := resty.New()
 	addr := os.Getenv("PRODUCT_CATALOG_SERVICE_ADDR")
 	if addr == "" {
-		addr = "http://localhost"
+		addr = "http://localhost:3550"
 	}
 	var products Products
 	_, err := client.R().
 		SetResult(&products).
-		Get(addr + ":3550/api/v1/products")
+		Get(addr + "/api/v1/products")
 	if err != nil {
 		panic(err.Error())
 	}
