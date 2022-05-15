@@ -1,0 +1,112 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    color: #111111;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Home */
+main {
+    flex: 1 0 auto;
+    background-color: #F9F9F9;
+}
+
+@media (min-width: 992px) {
+    .home .container-fluid {
+      height: calc(100vh - 91px); /* 91px is the height of the top/header bars. */
+    }
+    .home .container-fluid > .row > .col-4 {
+      height: calc(100vh - 91px);
+    }
+    .home .container-fluid > .row > .col-lg-8 {
+      height: calc(100vh - 91px);
+      overflow-y: scroll;
+    }
+}
+
+.home-mobile-hero-banner {
+    height: 200px;
+    background: url(/static/img/banners/folded-clothes-on-white-chair-wide.jpg) no-repeat top center;
+    background-size: cover;
+}
+
+.home-desktop-left-image {
+    background: url(/static/img/banners/folded-clothes-on-white-chair.jpg) no-repeat center;
+    background-size: cover;
+}
+
+.products-row {
+    padding-bottom: 70px;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.products-row h3 {
+    margin-bottom: 32px;
+    margin-top: 56px;
+    font-size: 36px;
+    font-weight: normal;
+}
+
+.product-box {
+    margin-bottom: 52px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.product-box img {
+    width: 100%;
+    height: auto;
+    border-radius: 20% 0 20% 20%;
+}
+
+.product-box-name {
+    margin-top: 8px;
+    font-size: 18px;
+    text-align: center;
+}
+
+.product-box a:link {
+    text-decoration: none;
+    color: #111111;
+}
+
+.product-box a:visited {
+    text-decoration: none;
+    color: #111111;
+}
+
+.product-box a:hover {
+    text-decoration: none;
+    color: #975015;
+}
+
+.product-box a:active {
+    text-decoration: none;
+    color: #975015;
+}
+
+.product-box > a:first-child {
+    position: relative;
+    display: block;
+}
+
+.product-box-img-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 20% 0 20% 20%;
+    background-color: transparent;
+}
+
+.home-desktop-footer-row {
+    padding-left: 9%;
+    padding-right: 9%;
+    background-color: #570D2E;
+}

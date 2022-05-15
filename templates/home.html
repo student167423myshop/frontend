@@ -2,17 +2,38 @@
 
 {{ template "header" . }}
 
-<main>
-    {{ range $.products }}
-    <div class="col-md-4 product-box">
-        <a href="/product/{{.Id}}">
-            <img alt="" src="{{.Picture}}">
-            <div class="product-box-name">{{ .Name }}</div>
-        </a>
+<main role="main" class="home">
+    <div class="home-mobile-hero-banner d-lg-none"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4 d-none d-lg-block home-desktop-left-image"></div>
+            <div class="col-12 col-lg-8">
+                <div class="px-xl-6 row products-row">
+                    <div class="col-12">
+                        <h3>Popularne produkty</h3>
+                    </div>
+                    {{ range $.products }}
+                    <div class="col-md-4 product-box">
+                        <a href="/product/{{.Id}}">
+                            <img alt="Zdjęcie produktu {{ .Name }}" class="product-box-img" src="{{.Picture}}">
+                            <div class="product-box-name">{{ .Name }}</div>
+                        </a>
+                    </div>
+                    {{ end }}
+                </div>
+
+                <div class="row d-none d-lg-block home-desktop-footer-row">
+                    <div class="col-12 p-0">
+                      {{ template "footer" . }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {{ end }}
 </main>
 
-{{ template "footer" . }}
+<div class="d-lg-none">
+    {{ template "footer" . }}
+</div>
 
 {{ end }}
