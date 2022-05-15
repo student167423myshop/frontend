@@ -2,13 +2,16 @@
 
 {{ template "header" . }}
 
-Home - To działa! Test zmiany szybkiej
-
-{{ range $.products }}
-<a href="/product/{{.Id}}">
-    <div>{{ .Name }}</div>
-</a>
-{{ end }}
+<main>
+    {{ range $.products }}
+    <div class="col-md-4 product-box">
+        <a href="/product/{{.Id}}">
+            <img alt="" src="{{.Picture}}">
+            <div class="product-box-name">{{ .Name }}</div>
+        </a>
+    </div>
+    {{ end }}
+</main>
 
 {{ template "footer" . }}
 
