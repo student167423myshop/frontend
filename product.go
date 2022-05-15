@@ -39,7 +39,7 @@ func getProducts() []Product {
 		SetResult(&products).
 		Get(addr + "/api/v1/products")
 	if err != nil {
-		panic(err.Error())
+		return nil
 	}
 
 	return products.Products
