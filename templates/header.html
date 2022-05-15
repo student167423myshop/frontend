@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Frontend</title>
+    <title>Sklep online</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/static/styles/styles.css">
@@ -13,5 +13,18 @@
 </head>
 <body>
     <header>
+        <div class="navbar">
+            <div class="container d-flex justify-content-between">
+                <a href="/" class="navbar-brand d-flex">
+                    <img src="/static/img/icons/NavLogo.svg" alt="" class="top-left-logo" />
+                    <p class="navbar-shop-title">Sklep online</p>
+                </a>
+                <div class="controls">
+                    <a href="/koszyk" class="cart-link">
+                        <img src="/static/img/icons/Cart.svg" alt="Ikona koszyka" class="logo" title="Koszyk" />
+                    </a>
+                </div>
+            </div>
+        </div>
     </header>
 {{end}}

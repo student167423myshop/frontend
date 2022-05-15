@@ -24,6 +24,20 @@ type Price struct {
 	Nanos int `json:"nanos"`
 }
 
+func (price *Price) GetUnits() int {
+	if price != nil {
+		return price.Units
+	}
+	return 0
+}
+
+func (price *Price) GetNanos() int {
+	if price != nil {
+		return price.Nanos
+	}
+	return 0
+}
+
 type Category struct {
 	Name string
 }

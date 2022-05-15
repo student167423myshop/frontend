@@ -1,3 +1,5 @@
+/* General */
+
 html, body {
     height: 100%;
 }
@@ -5,11 +7,60 @@ html, body {
 body {
     color: #111111;
     font-family: 'DM Sans', sans-serif;
+}
+
+/* Header */
+
+header {
+    background-color: white;
+}
+
+header .navbar {
+    height: 60px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+header .top-left-logo {
+    height: 2em;
+}
+
+header .cart-link {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+}
+
+header .navbar-shop-title {
+    font-size: 30px;
+    margin: auto 15px;
+    color: rgb(0, 0, 0);
+}
+
+header .navbar .navbar-brand {
+    padding: 0;
+}
+  
+header .navbar a {
+    color: #b4b2bb;
+}
+  
+header .navbar nav a {
+    margin: 0 10px;
+}
+
+header .navbar .controls {
+    display: flex;
+    height: 60px;
+}
+  
+header .navbar .controls a img {
+    width: 25px;
+    height: 25px;
+    margin-bottom: 3px;
 }
 
 /* Home */
+
 main {
     flex: 1 0 auto;
     background-color: #F9F9F9;
@@ -17,13 +68,13 @@ main {
 
 @media (min-width: 992px) {
     .home .container-fluid {
-      height: calc(100vh - 91px); /* 91px is the height of the top/header bars. */
+      height: calc(100vh - 60px); /* 91px height of header */
     }
     .home .container-fluid > .row > .col-4 {
-      height: calc(100vh - 91px);
+      height: calc(100vh - 60px);
     }
     .home .container-fluid > .row > .col-lg-8 {
-      height: calc(100vh - 91px);
+      height: calc(100vh - 60px);
       overflow-y: scroll;
     }
 }
@@ -70,6 +121,11 @@ main {
     text-align: center;
 }
 
+.product-box-price {
+    font-size: 14px;
+    text-align: center;
+}
+
 .product-box a:link {
     text-decoration: none;
     color: #111111;
@@ -109,4 +165,27 @@ main {
     padding-left: 9%;
     padding-right: 9%;
     background-color: #570D2E;
+}
+
+/* Footer */
+
+footer.py-5 {
+    flex-shrink: 0;
+    padding: 0 !important;
+}
+
+footer .footer-top {
+    padding: 60px 0px;
+    background-color: #570D2E;
+    color: white;
+}
+
+footer .footer-top .footer-social {
+  display: block;
+  align-items: center;
+  padding: 31px;
+}
+
+footer .footer-top .footer-social div {
+    width: 50%;
 }
