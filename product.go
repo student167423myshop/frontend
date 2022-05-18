@@ -58,3 +58,20 @@ func getProducts() []Product {
 
 	return products.Products
 }
+
+func getProduct(productId string) (Product, error) {
+	client := resty.New()
+	addr := os.Getenv("PRODUCT_CATALOG_SERVICE_ADDR")
+	if addr == "" {
+		addr = "http://localhost:3550"
+	}
+	var product Product
+	_, err := client.R().
+		SetResult(&product).
+		Get(addr + "/api/v1/product/" + productId)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return product, nil
+}
