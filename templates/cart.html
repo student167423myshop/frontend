@@ -1,0 +1,131 @@
+{{ define "cart" }}
+{{ template "header" . }}
+<main role="main" class="cart-sections">
+    {{ if eq (len $.items) 0 }}
+    <section class="empty-cart-section">
+        <h3>Twój koszyk jest pusty!</h3>
+        <p>Dodaj produkty do koszyka aby dokonać zakupu.</p>
+        <a class="button-primary" href="/" role="button">Kontynuuj zakupy</a>
+    </section>
+    {{ else }}
+    <section class="container">
+        <div class="row">
+            <div class="col-lg-6 col-xl-5 offset-xl-1 cart-summary-section">
+
+                <div class="row mb-3 py-2">
+                    <div class="col-4 pl-md-0">
+                        <h3>Koszyk ({{ $.cart_size }})</h3>
+                    </div>
+                    <div class="col-8 pr-md-0 text-right">
+                        <form method="POST" action="/cart/empty">
+                            <button class="button-secondary cart-summary-empty-cart-button" type="submit">
+                                Opróżnij koszyk
+                            </button>
+                            <a class="button-primary" href="/" role="button">
+                                Kontynuuj zakupy
+                            </a>
+                        </form>
+                    </div>
+                </div>
+
+                {{ range $.items }}
+                <div class="row cart-summary-item-row">
+                    <div class="col-md-4 pl-md-0">
+                        <a href="/product/{{.Item.Id}}">
+                            <img class="img-fluid" alt="" src="{{.Item.Picture}}" />
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-8 pr-md-0">
+                    <div class="row">
+                        <div class="col">
+                            <h4>{{ .Item.Name }}</h4>
+                        </div>
+                    </div>
+                    <div class="row cart-summary-item-row-item-id-row">
+                        <div class="col">
+                            SKU #{{ .Item.Id }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Ilość: {{ .Quantity }}
+                        </div>
+                        <div class="col pr-md-0 text-right">
+                            <strong>
+                                {{ renderPrice .Price }}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+                {{ end }}
+
+                <div class="row cart-summary-shipping-row">
+                    <div class="col pl-md-0">Dostawa</div>
+                    <div class="col pr-md-0 text-right">{{ renderPrice .shipping_cost }}</div>
+                </div>
+
+                <div class="row cart-summary-total-row">
+                    <div class="col pl-md-0">Razem</div>
+                    <div class="col pr-md-0 text-right">{{ renderPrice .total_cost }}</div>
+                </div>
+
+            </div>
+            <div class="col-lg-5 offset-lg-1 col-xl-4">
+                <form class="cart-checkout-form" action="/cart/checkout" method="POST">
+                    <div class="row">
+                        <div class="col">
+                            <h3>Adres dostawy</h3>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col form-field">
+                            <label for="email">Adres E-mail</label>
+                            <input type="email" id="email"
+                                name="email" value="kowalski@gmail.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col form-field">
+                            <label for="street_address">Ulica</label>
+                            <input type="text" name="street_address"
+                                id="street_address" value="Lipowa 12" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col form-field">
+                            <label for="zip_code">Kod pocztowy</label>
+                            <input type="text"
+                                name="zip_code" id="zip_code" value="10-100" required pattern="\d{2}-\d{3}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col form-field">
+                            <label for="city">Miasto</label>
+                            <input type="text" name="city" id="city"
+                                value="Wrocław" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-center">
+                        <div class="col text-center">
+                            <button class="button-primary" type="submit">
+                                Złóż zamówienie
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </section>
+    {{ end }} <!-- end if $.items -->
+</main>
+{{ template "footer" . }}
+{{ end }}

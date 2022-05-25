@@ -30,6 +30,17 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func viewCartHandler(w http.ResponseWriter, r *http.Request) {
+	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
+		"cart_size":     cartSize(cart),
+		"shipping_cost": shippingCost,
+		"total_cost":    totalPrice,
+		"items":         items,
+	}); err != nil {
+		panic(err.Error())
+	}
+}
+
 var (
 	templates = template.Must(
 		template.New("").Funcs(
@@ -48,4 +59,12 @@ func renderPrice(price Price) string {
 
 func renderCurrency() string {
 	return "PLN"
+}
+
+func cartSize(c []CartItem) int {
+	cartSize := 0
+	for _, item := range c {
+		cartSize += int(item.GetQuantity())
+	}
+	return cartSize
 }
