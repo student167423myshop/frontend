@@ -31,11 +31,16 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func viewCartHandler(w http.ResponseWriter, r *http.Request) {
+	sessionId := getSessionId(r)
+	cart, err := getCart(sessionId)
+	if err != nil {
+		panic(err.Error())
+	}
 	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
-		"cart_size":     cartSize(cart),
-		"shipping_cost": shippingCost,
-		"total_cost":    totalPrice,
-		"items":         items,
+		"cart_size": cartSize(cart),
+		//"shipping_cost": shippingCost,
+		//"total_cost":    totalPrice,
+		//"items":         items,
 	}); err != nil {
 		panic(err.Error())
 	}
@@ -48,6 +53,14 @@ var (
 				"renderPrice": renderPrice,
 			}).ParseGlob("templates/*.html"))
 )
+
+func getSessionId(r *http.Request) string {
+	sessionId := r.Context().Value(keySessionID{})
+	if sessionId != nil {
+		return sessionId.(string)
+	}
+	return ""
+}
 
 func renderPrice(price Price) string {
 	currencyLogo := renderCurrency()
