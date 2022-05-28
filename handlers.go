@@ -46,6 +46,46 @@ func viewCartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func addToCartHandler(w http.ResponseWriter, r *http.Request) {
+	sessionId := getSessionId(r)
+	err := addToCart(sessionId, "1", 1)
+	if err != nil {
+		panic(err.Error())
+	}
+	cart, err := getCart(sessionId)
+	if err != nil {
+		panic(err.Error())
+	}
+	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
+		"cart_size": cartSize(cart),
+		//"shipping_cost": shippingCost,
+		//"total_cost":    totalPrice,
+		//"items":         items,
+	}); err != nil {
+		panic(err.Error())
+	}
+}
+
+func emptyCartHandler(w http.ResponseWriter, r *http.Request) {
+	sessionId := getSessionId(r)
+	err := emptyCart(sessionId)
+	if err != nil {
+		panic(err.Error())
+	}
+	cart, err := getCart(sessionId)
+	if err != nil {
+		panic(err.Error())
+	}
+	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
+		"cart_size": cartSize(cart),
+		//"shipping_cost": shippingCost,
+		//"total_cost":    totalPrice,
+		//"items":         items,
+	}); err != nil {
+		panic(err.Error())
+	}
+}
+
 var (
 	templates = template.Must(
 		template.New("").Funcs(
