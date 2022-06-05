@@ -51,7 +51,7 @@ func getProducts() []Product {
 	var products Products
 	_, err := client.R().
 		SetResult(&products).
-		Get(addr + "/api/v1/products")
+		Get(addr + "/products")
 	if err != nil {
 		return nil
 	}
@@ -68,7 +68,7 @@ func getProduct(productId string) (Product, error) {
 	var product Product
 	_, err := client.R().
 		SetResult(&product).
-		Get(addr + "/api/v1/product/" + productId)
+		Get(addr + "/product/" + productId)
 	if err != nil {
 		panic(err.Error())
 	}

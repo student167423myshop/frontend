@@ -38,7 +38,7 @@ func TestRouterString(t *testing.T) {
 		t.Fatal(err)
 	}
 	respString := string(b)
-	expected := "Home"
+	expected := "home"
 
 	if !strings.Contains(respString, expected) {
 		t.Errorf("Response should contain %s, got %s", expected, respString)

@@ -30,7 +30,7 @@ func getCart(userId string) ([]CartItem, error) {
 	var cart []CartItem
 	_, err := client.R().
 		SetResult(&cart).
-		Get(addr + "/api/v1/cart/" + userId)
+		Get(addr + "/cart/" + userId)
 	return cart, err
 }
 
@@ -43,7 +43,7 @@ func addToCart(userId string, productId string, quantity int) error {
 	var cart []CartItem
 	_, err := client.R().
 		SetResult(&cart).
-		Get(addr + "/api/v1/cart/" + userId + "/add/" + productId + "/" + strconv.Itoa(quantity))
+		Get(addr + "/cart/" + userId + "/add/" + productId + "/" + strconv.Itoa(quantity))
 	return err
 }
 
@@ -56,6 +56,6 @@ func emptyCart(userId string) error {
 	var cart []CartItem
 	_, err := client.R().
 		SetResult(&cart).
-		Get(addr + "/api/v1/cart/" + userId + "/empty")
+		Get(addr + "/cart/" + userId + "/empty")
 	return err
 }
