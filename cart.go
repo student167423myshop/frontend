@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 
@@ -53,7 +52,6 @@ func addToCart(userId string, productId string, quantity int) error {
 		}).
 		SetResult(&cart).
 		Post(addr + "/cart")
-	fmt.Printf("addToCartHandler %s %s", cart.ClientId, cart.CartItems[0].ProductId)
 	return err
 }
 

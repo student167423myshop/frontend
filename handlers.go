@@ -31,24 +31,34 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func viewCartHandler(w http.ResponseWriter, r *http.Request) {
-	sessionId := getSessionId(r)
+func GetShippingCost() Price {
+	return Price{20, 000000000}
+}
 
-	shippingCost := Price{20, 0} // TODO: Poprawne zliczanie shoppingCost
-	totalPrice := Price{20, 0}
+func renderCart(w http.ResponseWriter, r *http.Request) {
+	sessionId := getSessionId(r)
 
 	cartItems, err := getCartItems(sessionId)
 	if err != nil {
 		panic(err.Error())
 	}
+
+	shippingCost := GetShippingCost()
+	productsCost := GetProductsPrice(cartItems)
+	totalCost := GetTotalPrice(shippingCost, productsCost)
+
 	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
 		"cart_size":     cartSize(cartItems),
 		"shipping_cost": shippingCost,
-		"total_cost":    totalPrice,
+		"total_cost":    totalCost,
 		"items":         cartItems,
 	}); err != nil {
 		panic(err.Error())
 	}
+}
+
+func viewCartHandler(w http.ResponseWriter, r *http.Request) {
+	renderCart(w, r)
 }
 
 func addToCartHandler(w http.ResponseWriter, r *http.Request) {
@@ -59,52 +69,24 @@ func addToCartHandler(w http.ResponseWriter, r *http.Request) {
 
 	sessionId := getSessionId(r)
 
-	shippingCost := Price{20, 0}
-	totalPrice := Price{20, 0}
-
-	fmt.Printf(" ONE: addToCartHandler %s %d %s", productId, quantity, sessionId)
-
 	err := addToCart(sessionId, productId, quantity)
 	if err != nil {
 		panic(err.Error())
 	}
-	cartItems, err := getCartItems(sessionId) // TODO: nie duplikowanie kodu z viewCartHandler
-	if err != nil {
-		panic(err.Error())
-	}
-	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
-		"cart_size":     cartSize(cartItems),
-		"shipping_cost": shippingCost,
-		"total_cost":    totalPrice,
-		"items":         cartItems,
-	}); err != nil {
-		panic(err.Error())
-	}
+
+	renderCart(w, r)
 }
 
 func emptyCartHandler(w http.ResponseWriter, r *http.Request) {
 
 	sessionId := getSessionId(r)
 
-	shippingCost := Price{20, 0}
-	totalPrice := Price{20, 0}
-
 	err := emptyCart(sessionId)
 	if err != nil {
 		panic(err.Error())
 	}
-	cartItems, err := getCartItems(sessionId)
-	if err != nil {
-		panic(err.Error())
-	}
-	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
-		"cart_size":     cartSize(cartItems),
-		"shipping_cost": shippingCost,
-		"total_cost":    totalPrice,
-		"items":         cartItems,
-	}); err != nil {
-		panic(err.Error())
-	}
+
+	renderCart(w, r)
 }
 
 var (

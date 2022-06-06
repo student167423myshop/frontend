@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"os"
 
 	"github.com/go-resty/resty/v2"
@@ -38,6 +39,13 @@ func (price *Price) GetNanos() int {
 	return 0
 }
 
+func (price *Price) GetFloat() float64 {
+	units := float64(price.GetUnits())
+	nanos := float64(price.GetNanos()) / 1000000000
+	fullPrice := units + nanos
+	return fullPrice
+}
+
 func getProducts() []Product {
 	client := resty.New()
 	addr := os.Getenv("PRODUCT_CATALOG_SERVICE_ADDR")
@@ -70,4 +78,25 @@ func getProduct(productId string) (Product, error) {
 	}
 
 	return product, nil
+}
+
+func GetPrice(fullValue float64) Price {
+	units := int(math.Floor(fullValue))
+	nanos := int(math.Round((fullValue-math.Floor(fullValue))*100) * 10000000)
+	return Price{units, nanos}
+}
+
+func GetProductsPrice(cartItems []CartItem) Price {
+	var totalValue float64
+	for _, cartItem := range cartItems {
+		product, _ := getProduct(cartItem.ProductId)
+		totalValue += product.Price.GetFloat() * float64(cartItem.Quantity)
+	}
+	return GetPrice(totalValue)
+}
+
+func GetTotalPrice(shippingPrice Price, productsPrice Price) Price {
+	totalPrice := shippingPrice.GetFloat() + productsPrice.GetFloat()
+	totalCost := GetPrice(totalPrice)
+	return totalCost
 }
