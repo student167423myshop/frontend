@@ -34,7 +34,7 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 func viewCartHandler(w http.ResponseWriter, r *http.Request) {
 	sessionId := getSessionId(r)
 
-	shippingCost := Price{20, 0}
+	shippingCost := Price{20, 0} // TODO: Poprawne zliczanie shoppingCost
 	totalPrice := Price{20, 0}
 
 	cartItems, err := getCartItems(sessionId)
@@ -68,7 +68,7 @@ func addToCartHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err.Error())
 	}
-	cartItems, err := getCartItems(sessionId)
+	cartItems, err := getCartItems(sessionId) // TODO: nie duplikowanie kodu z viewCartHandler
 	if err != nil {
 		panic(err.Error())
 	}
@@ -123,7 +123,7 @@ func getSessionId(r *http.Request) string {
 	if sessionId != nil {
 		return sessionId.(string)
 	}
-	return "0000001"
+	return "0000001" // TODO: Zwracanie poprawnego sessionId
 }
 
 func renderPrice(price Price) string {
