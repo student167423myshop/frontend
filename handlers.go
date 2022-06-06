@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -32,55 +33,75 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 
 func viewCartHandler(w http.ResponseWriter, r *http.Request) {
 	sessionId := getSessionId(r)
-	cart, err := getCart(sessionId)
+
+	shippingCost := Price{20, 0}
+	totalPrice := Price{20, 0}
+
+	cartItems, err := getCartItems(sessionId)
 	if err != nil {
 		panic(err.Error())
 	}
 	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
-		"cart_size": cartSize(cart),
-		//"shipping_cost": shippingCost,
-		//"total_cost":    totalPrice,
-		//"items":         items,
+		"cart_size":     cartSize(cartItems),
+		"shipping_cost": shippingCost,
+		"total_cost":    totalPrice,
+		"items":         cartItems,
 	}); err != nil {
 		panic(err.Error())
 	}
 }
 
 func addToCartHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("             addToCartHandler")
+	var productId = r.FormValue("productId")
+	var quantityStr = r.FormValue("quantity")
+	quantity, _ := strconv.Atoi(quantityStr)
+
 	sessionId := getSessionId(r)
-	err := addToCart(sessionId, "1", 1)
+
+	shippingCost := Price{20, 0}
+	totalPrice := Price{20, 0}
+
+	fmt.Printf(" ONE: addToCartHandler %s %d %s", productId, quantity, sessionId)
+
+	err := addToCart(sessionId, productId, quantity)
 	if err != nil {
 		panic(err.Error())
 	}
-	cart, err := getCart(sessionId)
+	cartItems, err := getCartItems(sessionId)
 	if err != nil {
 		panic(err.Error())
 	}
 	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
-		"cart_size": cartSize(cart),
-		//"shipping_cost": shippingCost,
-		//"total_cost":    totalPrice,
-		//"items":         items,
+		"cart_size":     cartSize(cartItems),
+		"shipping_cost": shippingCost,
+		"total_cost":    totalPrice,
+		"items":         cartItems,
 	}); err != nil {
 		panic(err.Error())
 	}
 }
 
 func emptyCartHandler(w http.ResponseWriter, r *http.Request) {
+
 	sessionId := getSessionId(r)
+
+	shippingCost := Price{20, 0}
+	totalPrice := Price{20, 0}
+
 	err := emptyCart(sessionId)
 	if err != nil {
 		panic(err.Error())
 	}
-	cart, err := getCart(sessionId)
+	cartItems, err := getCartItems(sessionId)
 	if err != nil {
 		panic(err.Error())
 	}
 	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
-		"cart_size": cartSize(cart),
-		//"shipping_cost": shippingCost,
-		//"total_cost":    totalPrice,
-		//"items":         items,
+		"cart_size":     cartSize(cartItems),
+		"shipping_cost": shippingCost,
+		"total_cost":    totalPrice,
+		"items":         cartItems,
 	}); err != nil {
 		panic(err.Error())
 	}
@@ -90,7 +111,10 @@ var (
 	templates = template.Must(
 		template.New("").Funcs(
 			template.FuncMap{
-				"renderPrice": renderPrice,
+				"renderPrice":        renderPrice,
+				"renderProductImage": renderProductImage,
+				"renderProductName":  renderProductName,
+				"renderProductPrice": renderProductPrice,
 			}).ParseGlob("templates/*.html"))
 )
 
@@ -99,7 +123,7 @@ func getSessionId(r *http.Request) string {
 	if sessionId != nil {
 		return sessionId.(string)
 	}
-	return ""
+	return "0000001"
 }
 
 func renderPrice(price Price) string {
@@ -120,4 +144,19 @@ func cartSize(c []CartItem) int {
 		cartSize += int(item.GetQuantity())
 	}
 	return cartSize
+}
+
+func renderProductImage(productId string) string {
+	product, _ := getProduct(productId)
+	return product.Picture
+}
+
+func renderProductName(productId string) string {
+	product, _ := getProduct(productId)
+	return product.Name
+}
+
+func renderProductPrice(productId string) string {
+	product, _ := getProduct(productId)
+	return renderPrice(product.Price)
 }

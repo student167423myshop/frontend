@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -21,17 +22,18 @@ func (cartItem *CartItem) GetQuantity() int {
 	return cartItem.Quantity
 }
 
-func getCart(userId string) ([]CartItem, error) {
+func getCartItems(userId string) ([]CartItem, error) {
 	client := resty.New()
 	addr := os.Getenv("CART_SERVICE_ADDR")
 	if addr == "" {
 		addr = "http://localhost:7070"
 	}
-	var cart []CartItem
-	_, err := client.R().
+	var cart Cart
+	_, err := client.
+		R().
 		SetResult(&cart).
 		Get(addr + "/cart/" + userId)
-	return cart, err
+	return cart.CartItems, err
 }
 
 func addToCart(userId string, productId string, quantity int) error {
@@ -40,10 +42,18 @@ func addToCart(userId string, productId string, quantity int) error {
 	if addr == "" {
 		addr = "http://localhost:7070"
 	}
-	var cart []CartItem
-	_, err := client.R().
+	quantityStr := strconv.Itoa(quantity)
+	var cart Cart
+	_, err := client.
+		R().
+		SetFormData(map[string]string{
+			"userId":    userId,
+			"productId": productId,
+			"quantity":  quantityStr,
+		}).
 		SetResult(&cart).
-		Get(addr + "/cart/" + userId + "/add/" + productId + "/" + strconv.Itoa(quantity))
+		Post(addr + "/cart")
+	fmt.Printf("addToCartHandler %s %s", cart.ClientId, cart.CartItems[0].ProductId)
 	return err
 }
 
@@ -53,9 +63,8 @@ func emptyCart(userId string) error {
 	if addr == "" {
 		addr = "http://localhost:7070"
 	}
-	var cart []CartItem
-	_, err := client.R().
-		SetResult(&cart).
+	_, err := client.
+		R().
 		Get(addr + "/cart/" + userId + "/empty")
 	return err
 }

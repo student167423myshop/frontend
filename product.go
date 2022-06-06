@@ -11,12 +11,12 @@ type Products struct {
 }
 
 type Product struct {
-	Id          string     `json:"id,omitempty"`
-	Name        string     `json:"name,omitempty"`
-	Description string     `json:"description"`
-	Picture     string     `json:"picture"`
-	Price       Price      `json:"price,omitempty"`
-	Categories  []Category `json:"categories"`
+	Id          string   `json:"id,omitempty"`
+	Name        string   `json:"name,omitempty"`
+	Description string   `json:"description"`
+	Picture     string   `json:"picture"`
+	Price       Price    `json:"price,omitempty"`
+	Categories  []string `json:"categories"`
 }
 
 type Price struct {
@@ -36,10 +36,6 @@ func (price *Price) GetNanos() int {
 		return price.Nanos
 	}
 	return 0
-}
-
-type Category struct {
-	Name string
 }
 
 func getProducts() []Product {
