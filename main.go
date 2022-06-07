@@ -9,6 +9,21 @@ import (
 
 type keySessionID struct{}
 
+var globalSessions *Manager
+
+func main() {
+	r := getRouter()
+
+	srv := &http.Server{
+		Handler: r,
+		Addr:    ":8080",
+	}
+
+	if err := srv.ListenAndServe(); err != nil {
+		panic(err.Error())
+	}
+}
+
 func getStaticHandler() http.Handler {
 	dir := http.Dir("./static/")
 	staticHandler := http.StripPrefix("/static/", http.FileServer(dir))
@@ -26,17 +41,4 @@ func getRouter() *mux.Router {
 	r.HandleFunc("/_healthz", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "ok") })
 
 	return r
-}
-
-func main() {
-	r := getRouter()
-
-	srv := &http.Server{
-		Handler: r,
-		Addr:    ":8080",
-	}
-
-	if err := srv.ListenAndServe(); err != nil {
-		panic(err.Error())
-	}
 }
