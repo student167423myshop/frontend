@@ -9,8 +9,6 @@ import (
 
 type keySessionID struct{}
 
-var globalSessions *Manager
-
 func main() {
 	r := getRouter()
 
