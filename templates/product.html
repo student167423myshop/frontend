@@ -11,8 +11,8 @@
                     <h2>{{ $.product.Name }}</h2>
                     <p class="product-price">{{ renderPrice $.product.Price }}</p>
                     <p>{{ $.product.Description }}</p>
-                    <form method="POST" action="/cart">
-                        <input type="hidden" name="product_id" value="{{$.product.Id}}" />
+                    <form method="POST" action="/koszyk">
+                        <input type="hidden" name="productId" value="{{$.product.Id}}" />
                         <div class="product-quantity-dropdown">
                             <select name="quantity" id="quantity">
                                 <option>1</option>
