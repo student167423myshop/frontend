@@ -66,3 +66,11 @@ func emptyCart(userId string) error {
 		Get(addr + "/cart/" + userId + "/empty")
 	return err
 }
+
+func cartSize(c []CartItem) int {
+	cartSize := 0
+	for _, item := range c {
+		cartSize += int(item.GetQuantity())
+	}
+	return cartSize
+}

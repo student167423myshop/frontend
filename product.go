@@ -100,3 +100,18 @@ func GetTotalPrice(shippingPrice Price, productsPrice Price) Price {
 	totalCost := GetPrice(totalPrice)
 	return totalCost
 }
+
+func renderProductImage(productId string) string {
+	product, _ := getProduct(productId)
+	return product.Picture
+}
+
+func renderProductName(productId string) string {
+	product, _ := getProduct(productId)
+	return product.Name
+}
+
+func renderProductPrice(productId string) string {
+	product, _ := getProduct(productId)
+	return renderPrice(product.Price)
+}
