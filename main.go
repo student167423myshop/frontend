@@ -7,8 +7,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type keySessionID struct{}
-
 func main() {
 	r := getRouter()
 

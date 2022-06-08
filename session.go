@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"time"
 )
 
 var client http.Client
@@ -24,19 +25,34 @@ func init() {
 }
 
 func getSessionId(r *http.Request) string {
+	fmt.Printf(" -- Sesje przed: \n.")
+	for _, c := range r.Cookies() {
+		fmt.Println(c)
+	}
+
 	cookie, err := r.Cookie("sessionId")
 	var sessionId string
 	if err != nil {
+		fmt.Printf(" -- Tworzenie nowej sesji.")
 		sessionId = getNewSessionId()
 		cookie := &http.Cookie{
-			Name:   "sessionId",
-			Value:  sessionId,
-			MaxAge: 300,
+			Name:     "sessionId",
+			Value:    sessionId,
+			Expires:  time.Now().Add(time.Minute * 60),
+			HttpOnly: true,
+			Secure:   true,
+			SameSite: http.SameSiteStrictMode,
 		}
 		r.AddCookie(cookie)
 	} else {
 		sessionId = cookie.Value
 	}
+
+	fmt.Printf(" -- Sesje po: \n.")
+	for _, c := range r.Cookies() {
+		fmt.Println(c)
+	}
+
 	return sessionId
 }
 
