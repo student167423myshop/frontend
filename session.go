@@ -24,7 +24,7 @@ func init() {
 	}
 }
 
-func getSessionId(r *http.Request) string {
+func getSessionId(w http.ResponseWriter, r *http.Request) string {
 	fmt.Printf(" -- Sesje przed: \n.")
 	for _, c := range r.Cookies() {
 		fmt.Println(c)
@@ -33,7 +33,6 @@ func getSessionId(r *http.Request) string {
 	cookie, err := r.Cookie("sessionId")
 	var sessionId string
 	if err != nil {
-		fmt.Printf(" -- Tworzenie nowej sesji.")
 		sessionId = getNewSessionId()
 		cookie := &http.Cookie{
 			Name:     "sessionId",
@@ -44,11 +43,11 @@ func getSessionId(r *http.Request) string {
 			SameSite: http.SameSiteStrictMode,
 		}
 		r.AddCookie(cookie)
+		http.SetCookie(w, cookie)
 	} else {
 		sessionId = cookie.Value
 	}
 
-	fmt.Printf(" -- Sesje po: \n.")
 	for _, c := range r.Cookies() {
 		fmt.Println(c)
 	}
@@ -61,6 +60,5 @@ func getNewSessionId() string {
 	io.ReadFull(rand.Reader, b)
 	sessionIdB := base64.URLEncoding.EncodeToString(b)
 	sessionId := url.QueryEscape(sessionIdB)
-	fmt.Printf(" -- sessionId: %s\n", sessionId)
 	return sessionId
 }

@@ -34,7 +34,7 @@ func viewCartHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func renderCart(w http.ResponseWriter, r *http.Request) {
-	cartItems, err := getCartItems(getSessionId(r))
+	cartItems, err := getCartItems(getSessionId(w, r))
 	if err != nil {
 		panic(err.Error())
 	}
@@ -55,7 +55,7 @@ func renderCart(w http.ResponseWriter, r *http.Request) {
 func addToCartHandler(w http.ResponseWriter, r *http.Request) {
 	var productId = r.FormValue("productId")
 	quantity, _ := strconv.Atoi(r.FormValue("quantity"))
-	err := addToCart(getSessionId(r), productId, quantity)
+	err := addToCart(getSessionId(w, r), productId, quantity)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -63,7 +63,7 @@ func addToCartHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func emptyCartHandler(w http.ResponseWriter, r *http.Request) {
-	err := emptyCart(getSessionId(r))
+	err := emptyCart(getSessionId(w, r))
 	if err != nil {
 		panic(err.Error())
 	}

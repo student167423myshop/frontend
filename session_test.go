@@ -76,6 +76,7 @@ func Test_getNewSessionId(t *testing.T) {
 }
 
 func Test_getSessionId(t *testing.T) {
+	recorder := httptest.NewRecorder()
 	req, err := http.NewRequest("GET", "http://google.com", nil)
 	if err != nil {
 		t.Errorf("Got error")
@@ -85,14 +86,14 @@ func Test_getSessionId(t *testing.T) {
 	if err != nil {
 		t.Errorf("Got error")
 	}
-	sessionIdFirst := getSessionId(req)
+	sessionIdFirst := getSessionId(recorder, req)
 	resp.Body.Close()
 
 	resp, err = client.Do(req)
 	if err != nil {
 		t.Errorf("Got error")
 	}
-	sessionIdSecond := getSessionId(req)
+	sessionIdSecond := getSessionId(recorder, req)
 
 	require.Equal(t, sessionIdFirst, sessionIdSecond)
 	resp.Body.Close()
