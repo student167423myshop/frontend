@@ -1,15 +1,13 @@
 package main
 
 import (
-	"crypto/rand"
-	"encoding/base64"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"net/http/cookiejar"
-	"net/url"
 	"time"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 var client http.Client
@@ -56,9 +54,5 @@ func getSessionId(w http.ResponseWriter, r *http.Request) string {
 }
 
 func getNewSessionId() string {
-	b := make([]byte, 32)
-	io.ReadFull(rand.Reader, b)
-	sessionIdB := base64.URLEncoding.EncodeToString(b)
-	sessionId := url.QueryEscape(sessionIdB)
-	return sessionId
+	return uuid.NewV4().String()
 }

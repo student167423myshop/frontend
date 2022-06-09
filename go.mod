@@ -14,6 +14,7 @@ require (
 require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gorilla/sessions v1.2.1
+	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.7.2
 	golang.org/x/net v0.0.0-20220513224357-95641704303c // indirect
 )
