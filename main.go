@@ -29,8 +29,8 @@ func getStaticHandler() http.Handler {
 func getRouter() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/", mainHandler).Methods(http.MethodGet)
-	r.HandleFunc("/produkt/{productId}", productHandler).Methods(http.MethodGet, http.MethodHead)
-	r.HandleFunc("/koszyk", viewCartHandler).Methods(http.MethodGet, http.MethodHead)
+	r.HandleFunc("/produkt/{productId}", productHandler).Methods(http.MethodGet)
+	r.HandleFunc("/koszyk", viewCartHandler).Methods(http.MethodGet)
 	r.HandleFunc("/koszyk", addToCartHandler).Methods(http.MethodPost)
 	r.HandleFunc("/koszyk/usun", emptyCartHandler).Methods(http.MethodPost)
 	r.PathPrefix("/static/").Handler(getStaticHandler())
