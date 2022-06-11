@@ -33,6 +33,8 @@ func getRouter() *mux.Router {
 	r.HandleFunc("/koszyk", viewCartHandler).Methods(http.MethodGet)
 	r.HandleFunc("/koszyk", addToCartHandler).Methods(http.MethodPost)
 	r.HandleFunc("/koszyk/usun", emptyCartHandler).Methods(http.MethodPost)
+	r.HandleFunc("/zamowienie", newOrderHandler).Methods(http.MethodPost)
+	r.HandleFunc("/zamowienie/{orderId}", viewOrderHandler).Methods(http.MethodGet)
 	r.PathPrefix("/static/").Handler(getStaticHandler())
 	r.HandleFunc("/_healthz", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "ok") })
 

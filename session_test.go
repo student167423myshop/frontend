@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -9,92 +8,40 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_SetCookie(t *testing.T) {
+func Test_SettingCookie(t *testing.T) {
+	// Arrange
+	r := getRouter()
+	mockServer := httptest.NewServer(r)
 	recorder := httptest.NewRecorder()
-	http.SetCookie(recorder, &http.Cookie{Name: "test", Value: "expected"})
-	cookie := recorder.Result().Cookies()[0].Value
-	require.Equal(t, "expected", cookie)
-}
+	req, _ := http.NewRequest("GET", mockServer.URL+"/", nil)
 
-func Test_CookieJar(t *testing.T) {
-	cookie := &http.Cookie{
-		Name:   "token",
-		Value:  "some_token",
-		MaxAge: 300,
+	expectedCookieName := "test"
+	expectedCookieValue := "expected"
+	expectedCookie := &http.Cookie{
+		Name:  expectedCookieName,
+		Value: expectedCookieValue,
 	}
 
-	cookie2 := &http.Cookie{
-		Name:   "clicked",
-		Value:  "true",
-		MaxAge: 300,
-	}
+	// Act
+	req.AddCookie(expectedCookie)
+	http.SetCookie(recorder, expectedCookie)
 
-	req, err := http.NewRequest("GET", "http://google.com", nil)
-	if err != nil {
-		t.Errorf("Got error")
-	}
-	req.AddCookie(cookie)
-	req.AddCookie(cookie2)
-	for _, c := range req.Cookies() {
-		fmt.Println(c)
-	}
-	resp, err := client.Do(req)
-	if err != nil {
-		t.Errorf("Got error")
-	}
-
-	cookieStr, _ := req.Cookie("token")
-	require.Equal(t, "some_token", cookieStr.Value)
-
-	defer resp.Body.Close()
-	fmt.Printf("StatusCode: %d\n", resp.StatusCode)
-}
-
-func Test_getNewSessionId(t *testing.T) {
-	req, err := http.NewRequest("GET", "http://google.com", nil)
-	if err != nil {
-		t.Errorf("Got error")
-	}
-	cookieValue := getNewSessionId()
-
-	cookie := &http.Cookie{
-		Name:   "sessionId",
-		Value:  cookieValue,
-		MaxAge: 300,
-	}
-	req.AddCookie(cookie)
-
-	resp, err := client.Do(req)
-	if err != nil {
-		t.Errorf("Got error")
-	}
-
-	cookieStr, _ := req.Cookie("sessionId")
-	require.Equal(t, cookieValue, cookieStr.Value)
-	fmt.Printf("StatusCode: %s\n", cookieStr)
-	defer resp.Body.Close()
+	// Assert
+	require.Equal(t, expectedCookieValue, recorder.Result().Cookies()[0].Value)
+	require.Equal(t, expectedCookieValue, req.Cookies()[0].Value)
 }
 
 func Test_getSessionId(t *testing.T) {
+	// Arrange
+	r := getRouter()
+	mockServer := httptest.NewServer(r)
 	recorder := httptest.NewRecorder()
-	req, err := http.NewRequest("GET", "http://google.com", nil)
-	if err != nil {
-		t.Errorf("Got error")
-	}
+	req, _ := http.NewRequest("GET", mockServer.URL+"/", nil)
 
-	resp, err := client.Do(req)
-	if err != nil {
-		t.Errorf("Got error")
-	}
+	// Acte
 	sessionIdFirst := getSessionId(recorder, req)
-	resp.Body.Close()
-
-	resp, err = client.Do(req)
-	if err != nil {
-		t.Errorf("Got error")
-	}
 	sessionIdSecond := getSessionId(recorder, req)
 
+	// Assert
 	require.Equal(t, sessionIdFirst, sessionIdSecond)
-	resp.Body.Close()
 }

@@ -14,8 +14,8 @@
                     </div>
                     {{ range $.products }}
                     <div class="col-md-4 product-box">
-                        <a href="/produkt/{{.Id}}">
-                            <img alt="Zdjęcie produktu {{ .Name }}" class="product-box-img" src="{{.Picture}}">
+                        <a href="/produkt/{{.ProductId}}">
+                            <img alt="Zdjęcie produktu {{ .Name }}" class="product-box-img" src="{{.PictureUrl}}">
                             <div class="product-box-name">{{ .Name }}</div>
                             <div class="product-box-price">{{ renderPrice .Price }}</div>
                         </a>

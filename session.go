@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"time"
@@ -15,23 +13,19 @@ var client http.Client
 func init() {
 	jar, err := cookiejar.New(nil)
 	if err != nil {
-		log.Fatalf("Got error while creating cookie jar %s", err.Error())
+		panic(err.Error())
 	}
 	client = http.Client{
 		Jar: jar,
 	}
 }
 
+// INNER FUNCTIONS
 func getSessionId(w http.ResponseWriter, r *http.Request) string {
-	fmt.Printf(" -- Sesje przed: \n.")
-	for _, c := range r.Cookies() {
-		fmt.Println(c)
-	}
-
-	cookie, err := r.Cookie("sessionId")
 	var sessionId string
+	cookie, err := r.Cookie("sessionId")
 	if err != nil {
-		sessionId = getNewSessionId()
+		sessionId = uuid.NewV4().String()
 		cookie := &http.Cookie{
 			Name:     "sessionId",
 			Value:    sessionId,
@@ -45,14 +39,5 @@ func getSessionId(w http.ResponseWriter, r *http.Request) string {
 	} else {
 		sessionId = cookie.Value
 	}
-
-	for _, c := range r.Cookies() {
-		fmt.Println(c)
-	}
-
 	return sessionId
-}
-
-func getNewSessionId() string {
-	return uuid.NewV4().String()
 }

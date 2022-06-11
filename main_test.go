@@ -6,79 +6,63 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestRouter(t *testing.T) {
+	// Arrange
 	r := getRouter()
 	mockServer := httptest.NewServer(r)
-	resp, err := http.Get(mockServer.URL + "/")
 
-	if err != nil {
-		t.Fatal(err)
-	}
+	// Act
+	resp, _ := http.Get(mockServer.URL + "/")
 
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("Status should be ok, got %d", resp.StatusCode)
-	}
-
-	defer resp.Body.Close()
+	// Assert
+	require.Equal(t, http.StatusOK, resp.StatusCode)
 }
 
 func TestRouterString(t *testing.T) {
+	// Arrange
+	expected := "home"
 	r := getRouter()
 	mockServer := httptest.NewServer(r)
-	resp, err := http.Get(mockServer.URL + "/")
+	resp, _ := http.Get(mockServer.URL + "/")
 
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatal(err)
-	}
+	// Act
+	b, _ := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	respString := string(b)
-	expected := "home"
 
+	// Assert
 	if !strings.Contains(respString, expected) {
 		t.Errorf("Response should contain %s, got %s", expected, respString)
 	}
 }
 
-func TestRouterForNonExistentRoute(t *testing.T) {
+func Test_RouterForNonExistentRoute(t *testing.T) {
+	// Arrange
 	r := getRouter()
 	mockServer := httptest.NewServer(r)
-	resp, err := http.Post(mockServer.URL+"/", "", nil)
 
-	if err != nil {
-		t.Fatal(err)
-	}
+	// Act
+	resp, _ := http.Post(mockServer.URL+"/", "", nil)
 
-	if resp.StatusCode != http.StatusMethodNotAllowed {
-		t.Errorf("Status should be 405, got %d", resp.StatusCode)
-	}
-
-	defer resp.Body.Close()
+	// Assert
+	require.Equal(t, http.StatusMethodNotAllowed, resp.StatusCode)
 }
 
-func TestStaticFileServerRouter(t *testing.T) {
+func Test_StaticFileServerRouter(t *testing.T) {
+	// Arrange
+	expectedContentType := "text/html; charset=utf-8"
 	r := getRouter()
 	mockServer := httptest.NewServer(r)
 
-	resp, err := http.Get(mockServer.URL + "/static/")
-	if err != nil {
-		t.Fatal(err)
-	}
+	// Act
+	resp, _ := http.Get(mockServer.URL + "/static/")
 
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("Status should be 200, got %d", resp.StatusCode)
-	}
-
+	// Arrange
+	require.Equal(t, http.StatusOK, resp.StatusCode)
 	contentType := resp.Header.Get("Content-Type")
-	expectedContentType := "text/html; charset=utf-8"
-
-	if expectedContentType != contentType {
-		t.Errorf("Wrong content type, expected %s, got %s",
-			expectedContentType, contentType)
-	}
+	require.Equal(t, expectedContentType, contentType)
 }

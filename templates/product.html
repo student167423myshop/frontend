@@ -4,7 +4,7 @@
     <div class="h-product container">
         <div class="row">
             <div class="col-md-6">
-                <img class="product-image" alt="" src="{{$.product.Picture}}" />
+                <img class="product-image" alt="" src="{{$.product.PictureUrl}}" />
             </div>
             <div class="product-info col-md-5">
                 <div class="product-wrapper">
@@ -12,7 +12,7 @@
                     <p class="product-price">{{ renderPrice $.product.Price }}</p>
                     <p>{{ $.product.Description }}</p>
                     <form method="POST" action="/koszyk">
-                        <input type="hidden" name="productId" value="{{$.product.Id}}" />
+                        <input type="hidden" name="productId" value="{{$.product.ProductId}}" />
                         <div class="product-quantity-dropdown">
                             <select name="quantity" id="quantity">
                                 <option>1</option>

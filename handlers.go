@@ -10,7 +10,7 @@ import (
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	if err := templates.ExecuteTemplate(w, "home", map[string]interface{}{
-		"products": getProducts(),
+		"products": getAllProducts(),
 	}); err != nil {
 		panic(err.Error())
 	}
@@ -39,11 +39,18 @@ func renderCart(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 
-	shippingCost := GetShippingCost()
-	totalCost := GetTotalPrice(shippingCost, GetProductsPrice(cartItems))
+	shippingCost := getShippingCost()
+	productIds := getProductIds(cartItems)
+	products, err := getProducts(productIds)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	productsPrice := getProductsPrice(products, cartItems)
+	totalCost := getTotalPrice(shippingCost, productsPrice)
 
 	if err := templates.ExecuteTemplate(w, "cart", map[string]interface{}{
-		"cart_size":     cartSize(cartItems),
+		"cart_size":     getCartSize(cartItems),
 		"shipping_cost": shippingCost,
 		"total_cost":    totalCost,
 		"items":         cartItems,
@@ -53,7 +60,7 @@ func renderCart(w http.ResponseWriter, r *http.Request) {
 }
 
 func addToCartHandler(w http.ResponseWriter, r *http.Request) {
-	var productId = r.FormValue("productId")
+	productId := r.FormValue("productId")
 	quantity, _ := strconv.Atoi(r.FormValue("quantity"))
 	err := addToCart(getSessionId(w, r), productId, quantity)
 	if err != nil {
@@ -68,6 +75,35 @@ func emptyCartHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 	renderCart(w, r)
+}
+
+func newOrderHandler(w http.ResponseWriter, r *http.Request) {
+	email := r.FormValue("email")
+	streetAddress := r.FormValue("street_address")
+	zipCode := r.FormValue("zip_code")
+	city := r.FormValue("city")
+	address := Address{email, streetAddress, zipCode, city}
+	userId := getSessionId(w, r)
+	order, err := newOrder(userId, address)
+	if err != nil {
+		panic(err.Error())
+	}
+	url := "/zamowienie/" + order.OrderId
+	http.Redirect(w, r, url, http.StatusSeeOther)
+}
+
+func viewOrderHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	orderId := vars["orderId"]
+	order, err := getOrder(orderId)
+	if err != nil {
+		panic(err.Error())
+	}
+	if err := templates.ExecuteTemplate(w, "order", map[string]interface{}{
+		"order": order,
+	}); err != nil {
+		panic(err.Error())
+	}
 }
 
 var (

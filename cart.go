@@ -7,6 +7,7 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
+// STRUCTS
 type Cart struct {
 	ClientId  string     `json:"ClientId"`
 	CartItems []CartItem `json:"CartItems"`
@@ -17,10 +18,7 @@ type CartItem struct {
 	Quantity  int    `json:"Quantity"`
 }
 
-func (cartItem *CartItem) GetQuantity() int {
-	return cartItem.Quantity
-}
-
+// API
 func getCartItems(userId string) ([]CartItem, error) {
 	client := resty.New()
 	addr := os.Getenv("CART_SERVICE_ADDR")
@@ -67,10 +65,11 @@ func emptyCart(userId string) error {
 	return err
 }
 
-func cartSize(c []CartItem) int {
+// INNER FUNCTIONS
+func getCartSize(c []CartItem) int {
 	cartSize := 0
 	for _, item := range c {
-		cartSize += int(item.GetQuantity())
+		cartSize += int(item.Quantity)
 	}
 	return cartSize
 }
