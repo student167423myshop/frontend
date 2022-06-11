@@ -5,7 +5,7 @@
     <section class="empty-cart-section">
         <h3>Twój koszyk jest pusty!</h3>
         <p>Dodaj produkty do koszyka aby dokonać zakupu.</p>
-        <a class="button-primary" href="/" role="button">Kontynuuj zakupy</a>
+        <a class="btn btn-primary button-primary shopping-continue-btn" href="/" role="button">Kontynuuj zakupy</a>
     </section>
     {{ else }}
     <section class="container">
@@ -18,11 +18,11 @@
                     </div>
                     <div class="col-8 pr-md-0 text-right">
                         <form method="POST" action="/koszyk/usun">
-                            <button class="button-secondary cart-summary-empty-cart-button" type="submit">
+                            <button class="btn btn-danger button-danger cart-summary-empty-cart-button" type="submit">
                                 Opróżnij koszyk
                             </button>
                         </form>
-                            <a class="button-primary" href="/" role="button">
+                            <a class="btn btn-secondary button-primary shopping-continue-btn" href="/" role="button">
                                 Kontynuuj zakupy
                             </a>
                     </div>
@@ -35,26 +35,26 @@
                             <img class="img-fluid" alt="" src="{{ renderProductImage .ProductId }}" />
                         </a>
                     </div>
-                </div>
-                <div class="col-md-8 pr-md-0">
-                    <div class="row">
-                        <div class="col">
-                            <h4>{{ renderProductName .ProductId }}</h4>
+                    <div class="col-md-8 pr-md-0">
+                        <div class="row">
+                            <div class="col">
+                                <h4>{{ renderProductName .ProductId }}</h4>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row cart-summary-item-row-item-id-row">
-                        <div class="col">
-                            SKU #{{ .ProductId }}
+                        <div class="row cart-summary-item-row-item-id-row">
+                            <div class="col">
+                                SKU #{{ .ProductId }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Ilość: {{ .Quantity }}
-                        </div>
-                        <div class="col pr-md-0 text-right">
-                            <strong>
-                                {{ renderProductPrice .ProductId }}
-                            </strong>
+                        <div class="row">
+                            <div class="col">
+                                Ilość: {{ .Quantity }}
+                            </div>
+                            <div class="col pr-md-0 text-right">
+                                <strong>
+                                    {{ renderProductPrice .ProductId }}
+                                </strong>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
 
                     <div class="form-row justify-content-center">
                         <div class="col text-center">
-                            <button class="button-primary" type="submit">
+                            <button class="btn btn-primary button-primary" type="submit">
                                 Złóż zamówienie
                             </button>
                         </div>
